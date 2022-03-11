@@ -71,6 +71,7 @@ def f_c_k():
         f_c += (z[i - 1] * prod1 * inv_mod(prod2, p)) % p
     print(f_c % p)
 
+
 ###!!!!De regandit!!!! ~ probabil de adus la num comun tot
 # def f_c_1():
 #     f_c = 0
@@ -88,6 +89,49 @@ def f_c_k():
 f_c_worst()
 f_c_k()
 
+
+def multiply(P1, P2):
+    m = len(P1)
+    n = len(P2)
+    prod = [0] * (m + n - 1)
+    for i in range(m):
+        for j in range(n):
+            prod[i + j] += P1[i] * P2[j]
+    return prod
+
+
+def printP(P):
+    n = len(P)
+    for i in range(n):
+        print(P[i], end="");
+        if (i != 0):
+            print(" * x ^", i, end="");
+        if (i != n - 1):
+            print(" + ", end="");
+
+
+printP(multiply([1, -1], [1, 1]))
+
+
+def get_P():
+    P = []
+    print(A)
+    for i in A:
+        prod1 = [1]
+        prod2 = 1
+        for j in A:
+            if j != i:
+                prod1 = multiply(prod1, [-j, 1])
+                prod2 *= ((j - i) % p)
+
+        # adunam polin
+        # aux = [(z[i - 1] * i * inv_mod(prod2, p)) % p for i in prod1]
+        # prod1 = aux
+        # P = list(map(lambda x, y: (x + y) % p, P, prod1))
+    print(P)
+
+
+get_P()
 #####################Main#####################
 
 # Press the green button in the gutter to run the script.
