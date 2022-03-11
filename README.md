@@ -9,6 +9,7 @@ BAREM TEMA 1
 ----------------Codificare----------------
 
 -codificarea input-ului (specificat initial ca un sir de caractere) ca vector de numere naturale mai mici decat p (1p)
+
 -codificarea efectiva, folosind schema lui Horner pentru evaluarea polinomului P(x) in punctele 1,2,...,n (2p)
 
 
