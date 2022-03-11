@@ -2,6 +2,15 @@
 # cussed in class. For simplicity, consider s = 1 (a single error may be
 # corrected). Use as few modular inversions operations as possible. (10p)
 
+import sympy
+import random
+
+def gen_p(n):
+  return sympy.randprime(2**(n-1)+1, 2**n-1)
+
+p = gen_p(162)
+print(p)
+
 #####################Encoding#####################
 
 def base_10_to_p(m, p):
@@ -30,9 +39,10 @@ def encode(a, k, s, p):
 
 
 def encoding(k, s, p, m):
-    a = base_10_to_p(m, p)
-    print(encode(a, k, s, p))
-    return 0
+    a = base_10_to_p(int(m), p)
+    return encode(a, k, s, p)
+
+print(encoding(3, 1, 11, "29"))
 
 
 #####################Decoding#####################
@@ -41,11 +51,14 @@ def inv_mod(x, p):
     return pow(x, -1, p)
 
 
+
+k = 3
 p = 11
-y = [9, 0, 6, 5, 8]
+# y = [9, 0, 6, 5, 8]
 z = [9, 2, 6, 5, 8]
 
-A = {1, 3, 4, 5}
+A = random.sample(range(1, len(z)+1), k+1)
+print(A)
 
 
 def f_c_worst():
@@ -110,7 +123,7 @@ def printP(P):
             print(" + ", end="");
 
 
-printP(multiply([1, -1], [1, 1]))
+# printP(multiply([1, -1], [1, 1]))
 
 
 def get_P():
@@ -128,12 +141,12 @@ def get_P():
         # aux = [(z[i - 1] * i * inv_mod(prod2, p)) % p for i in prod1]
         # prod1 = aux
         # P = list(map(lambda x, y: (x + y) % p, P, prod1))
-    print(P)
+    # print(P)
 
 
-get_P()
+# get_P()
 #####################Main#####################
 
 # Press the green button in the gutter to run the script.
-# if __name__ == '__main__':
-# encoding(3, 1, 11, 29)
+if __name__ == '__main__':
+    encoding(3, 1, 11, 29)
