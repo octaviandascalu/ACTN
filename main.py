@@ -5,11 +5,10 @@
 import sympy
 import random
 
-def gen_p(n):
-  return sympy.randprime(2**(n-1)+1, 2**n-1)
 
-p = gen_p(162)
-print(p)
+def gen_p(n):
+    return sympy.randprime(2 ** (n - 1) + 1, 2 ** n - 1)
+
 
 #####################Encoding#####################
 
@@ -42,23 +41,11 @@ def encoding(k, s, p, m):
     a = base_10_to_p(int(m), p)
     return encode(a, k, s, p)
 
-print(encoding(3, 1, 11, "29"))
-
 
 #####################Decoding#####################
 
 def inv_mod(x, p):
     return pow(x, -1, p)
-
-
-
-k = 3
-p = 11
-# y = [9, 0, 6, 5, 8]
-z = [9, 2, 6, 5, 8]
-
-A = random.sample(range(1, len(z)+1), k+1)
-print(A)
 
 
 def f_c_worst():
@@ -99,18 +86,25 @@ def f_c_k():
 #     print(f_c % p)
 
 
-f_c_worst()
-f_c_k()
-
-
 def multiply(P1, P2):
-    m = len(P1)
-    n = len(P2)
-    prod = [0] * (m + n - 1)
-    for i in range(m):
-        for j in range(n):
+    n = len(P1)
+    m = len(P2)
+    prod = [0] * (n + m - 1)
+    for i in range(n):
+        for j in range(m):
             prod[i + j] += P1[i] * P2[j]
     return prod
+
+
+def add(P1, P2):
+    n = len(P1)
+    m = len(P2)
+    sum = [0] * max(n, m)
+    for i in range(n):
+        sum[i] = P1[i]
+    for i in range(m):
+        sum[i] += P2[i]
+    return sum
 
 
 def printP(P):
@@ -121,9 +115,12 @@ def printP(P):
             print(" * x ^", i, end="");
         if (i != n - 1):
             print(" + ", end="");
+    print("\n")
 
 
-# printP(multiply([1, -1], [1, 1]))
+printP(multiply([1, -1], [1, 1]))
+printP(multiply([5, 0, 10, 6], [1, 2, 4]))
+printP(add([5, 0, 10, 6], [1, 2, 4]))
 
 
 def get_P():
@@ -150,3 +147,17 @@ def get_P():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     encoding(3, 1, 11, 29)
+    p = gen_p(162)
+    print("Un numar prim mare (peste 161 biti):", p)
+    print("Codificarea lui k = 3, s = 1, p = 11 si m = 29:", encoding(3, 1, 11, "29"))
+
+    k = 3
+    p = 11
+    # y = [9, 0, 6, 5, 8]
+    z = [9, 2, 6, 5, 8]
+
+    A = random.sample(range(1, len(z) + 1), k + 1)
+    print(A)
+
+    f_c_worst()
+    f_c_k()
