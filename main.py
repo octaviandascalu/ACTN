@@ -102,6 +102,28 @@ def f_c_k(A):
     return f_c % p
 
 
+def f_c_1(A):
+    numarator = 0
+    numitor = 1
+    for i in A:
+        termen = z[i - 1]
+        for j in A:
+            if j != i:
+                termen = termen * j
+                for l in A:
+                    if l != j:
+                        termen = termen * (l - j)
+        termen = termen % p
+        numarator = (numarator + termen) % p
+
+    for i in A:
+        for j in A:
+            if j != i:
+                numitor = (numitor * (i - j)) % p
+    f_c = numarator * inv_mod(numitor, p)
+    return f_c % p
+
+
 def P_dec(A):
     pol = [0]
     for i in A:
@@ -115,19 +137,6 @@ def P_dec(A):
     # pol.reverse()
     return pol
 
-
-###!!!!De regandit!!!! ~ probabil de adus la num comun tot
-# def f_c_1():
-#     f_c = 0
-#     for i in A:
-#         prod1 = 1
-#         prod2 = 1
-#         for j in A:
-#             if j != i:
-#                 prod1 *= j
-#                 prod2 *= ((j - i) % p)
-#         f_c += (z[i - 1] * prod1 * inv_mod(prod2, p)) % p
-#     print(f_c % p)
 
 def decodificare():
     f_c = None
@@ -146,10 +155,15 @@ def decodificare():
         f_c = f_c_k(A)
         k_time = time.time() - start_time
         # print(f_c)
-    print("k time %s vs kk-1 time %s" % (k_time, kk_1_time))
+
+        start_time = time.time()
+        f_c = f_c_1(A)
+        one_time = time.time() - start_time
+        # print(f_c)
+    print("k time %s vs kk-1 time %s vs 1 time %s" % (k_time, kk_1_time, one_time))
     print("A:", A)
     print("f_c:", f_c)
-    print("Decodificare:", P_dec(A))
+    print("Decodificare:", P_dec(A), "\n")
 
 
 #####################Main#####################
