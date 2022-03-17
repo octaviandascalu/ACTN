@@ -17,8 +17,8 @@ def base_10_to_p(m, p):
     while m:
         r.append(m % p)
         m = m // p
-    # r.reverse()
-    # print(r)
+    r.reverse()
+    print(r)
     return r
 
 
@@ -93,7 +93,7 @@ def f_c_worst():
             if j != i:
                 prod *= (j * inv_mod((j - i) % p, p))
         f_c += (z[i - 1] * prod) % p
-    print(f_c % p)
+    return f_c % p
 
 
 def f_c_k():
@@ -106,7 +106,7 @@ def f_c_k():
                 prod1 *= j
                 prod2 *= ((j - i) % p)
         f_c += (z[i - 1] * prod1 * inv_mod(prod2, p)) % p
-    print(f_c % p)
+    return f_c % p
 
 
 def P_dec():
@@ -119,7 +119,8 @@ def P_dec():
                 prod1 = multiply(prod1, [-j, 1])
                 prod2 *= ((i - j) % p)
         pol = add(pol, [(element * z[i - 1] * inv_mod(prod2, p)) % p for element in prod1])
-    print(pol)
+    pol.reverse()
+    return pol
 
 
 ###!!!!De regandit!!!! ~ probabil de adus la num comun tot
@@ -135,43 +136,29 @@ def P_dec():
 #         f_c += (z[i - 1] * prod1 * inv_mod(prod2, p)) % p
 #     print(f_c % p)
 
-
-def get_P():
-    P = []
-    print(A)
-    for i in A:
-        prod1 = [1]
-        prod2 = 1
-        for j in A:
-            if j != i:
-                prod1 = multiply(prod1, [-j, 1])
-                prod2 *= ((j - i) % p)
-
-        # adunam polin
-        # aux = [(z[i - 1] * i * inv_mod(prod2, p)) % p for i in prod1]
-        # prod1 = aux
-        # P = list(map(lambda x, y: (x + y) % p, P, prod1))
-    # print(P)
-
-
-# get_P()
 #####################Main#####################
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    encoding(3, 1, 11, 29)
     p = gen_p(162)
     print("Un numar prim mare (peste 161 biti):", p)
-    print("Codificarea lui k = 3, s = 1, p = 11 si m = 29:", encoding(3, 1, 11, "29"))
 
     k = 3
     p = 11
+    s = 1
+    print("Codificarea lui k = 3, s = 1, p = 11 si m = 29:", encoding(k, s, p, "29"))
     # y = [9, 0, 6, 5, 8]
     z = [9, 2, 6, 5, 8]
 
-    A = random.sample(range(1, len(z) + 1), k + 1)
-    print(A)
+    f_c = -1
+    while f_c != 0:
+        A = random.sample(range(1, len(z) + 1), k + 1)
 
-    f_c_worst()
-    f_c_k()
-    P_dec()
+        f_c = f_c_worst()
+        # print(f_c)
+
+        f_c = f_c_k()
+        # print(f_c)
+    print("A:", A)
+    print("f_c:", f_c)
+    print("Decodificare:", P_dec())
