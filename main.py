@@ -13,12 +13,13 @@ def gen_p(n):
 #####################Encoding#####################
 
 def base_10_to_p(m, p):
+    print("Reprezentarea lui ", m, "in baza", p, end=" ")
     r = []
     while m:
         r.append(m % p)
         m = m // p
-    r.reverse()
-    print(r)
+    # r.reverse()
+    print(":", r)
     return r
 
 
@@ -85,7 +86,7 @@ def printP(P):
 # printP(add([5, 0, 10, 6], [1, 2, 4]))
 
 
-def f_c_worst():
+def f_c_worst(A):
     f_c = 0
     for i in A:
         prod = 1
@@ -96,7 +97,7 @@ def f_c_worst():
     return f_c % p
 
 
-def f_c_k():
+def f_c_k(A):
     f_c = 0
     for i in A:
         prod1 = 1
@@ -109,7 +110,7 @@ def f_c_k():
     return f_c % p
 
 
-def P_dec():
+def P_dec(A):
     pol = [0]
     for i in A:
         prod1 = [1]
@@ -117,9 +118,9 @@ def P_dec():
         for j in A:
             if j != i:
                 prod1 = multiply(prod1, [-j, 1])
-                prod2 *= ((i - j) % p)
-        pol = add(pol, [(element * z[i - 1] * inv_mod(prod2, p)) % p for element in prod1])
-    pol.reverse()
+                prod2 = ((prod2 * (i - j)) % p)
+        pol = add(pol, [(x * z[i - 1] * inv_mod(prod2, p)) % p for x in prod1])
+    # pol.reverse()
     return pol
 
 
@@ -136,6 +137,22 @@ def P_dec():
 #         f_c += (z[i - 1] * prod1 * inv_mod(prod2, p)) % p
 #     print(f_c % p)
 
+def decodificare():
+    f_c = -1
+    A = None
+    while f_c != 0:
+        A = random.sample(range(1, len(z) + 1), k + 1)
+        # print(A)
+        # f_c = f_c_worst(A)
+        # print(f_c)
+
+        f_c = f_c_k(A)
+        # print(f_c)
+    print("A:", A)
+    print("f_c:", f_c)
+    print("Decodificare:", P_dec(A))
+
+
 #####################Main#####################
 
 # Press the green button in the gutter to run the script.
@@ -149,16 +166,20 @@ if __name__ == '__main__':
     print("Codificarea lui k = 3, s = 1, p = 11 si m = 29:", encoding(k, s, p, "29"))
     # y = [9, 0, 6, 5, 8]
     z = [9, 2, 6, 5, 8]
+    decodificare()
 
-    f_c = -1
-    while f_c != 0:
-        A = random.sample(range(1, len(z) + 1), k + 1)
+    k = 4
+    p = 13
+    s = 1
+    print("Codificarea lui k = 4, s = 1, p = 13 si m = 205:", encoding(k, s, p, "205"))
+    # y = [0, 12, 5, 0, 5, 2]
+    z = [0, 9, 5, 0, 5, 2]
+    decodificare()
 
-        f_c = f_c_worst()
-        # print(f_c)
-
-        f_c = f_c_k()
-        # print(f_c)
-    print("A:", A)
-    print("f_c:", f_c)
-    print("Decodificare:", P_dec())
+    k = 5
+    p = 31
+    s = 1
+    print("Codificarea lui k = 5, s = 1, p = 31 si m = 65785:", encoding(k, s, p, "65785"))
+    # y = [25, 2, 30, 1, 3, 10, 6]
+    z = [25, 11, 30, 1, 3, 10, 6]
+    decodificare()
