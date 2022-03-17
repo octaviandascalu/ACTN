@@ -48,6 +48,43 @@ def inv_mod(x, p):
     return pow(x, -1, p)
 
 
+def multiply(P1, P2):  # de ad %p
+    n = len(P1)
+    m = len(P2)
+    prod = [0] * (n + m - 1)
+    for i in range(n):
+        for j in range(m):
+            prod[i + j] = (prod[i + j] + P1[i] * P2[j]) % p
+    return prod
+
+
+def add(P1, P2):
+    n = len(P1)
+    m = len(P2)
+    sum = [0] * max(n, m)
+    for i in range(n):
+        sum[i] = P1[i]
+    for i in range(m):
+        sum[i] = (sum[i] + P2[i]) % p
+    return sum
+
+
+def printP(P):
+    n = len(P)
+    for i in range(n):
+        print(P[i], end="");
+        if (i != 0):
+            print(" * x ^", i, end="");
+        if (i != n - 1):
+            print(" + ", end="");
+    print("\n")
+
+
+# printP(multiply([1, -1], [1, 1]))
+# printP(multiply([5, 0, 10, 6], [1, 2, 4]))
+# printP(add([5, 0, 10, 6], [1, 2, 4]))
+
+
 def f_c_worst():
     f_c = 0
     for i in A:
@@ -72,6 +109,19 @@ def f_c_k():
     print(f_c % p)
 
 
+def P_dec():
+    pol = [0]
+    for i in A:
+        prod1 = [1]
+        prod2 = 1
+        for j in A:
+            if j != i:
+                prod1 = multiply(prod1, [-j, 1])
+                prod2 *= ((i - j) % p)
+        pol = add(pol, [(element * z[i - 1] * inv_mod(prod2, p)) % p for element in prod1])
+    print(pol)
+
+
 ###!!!!De regandit!!!! ~ probabil de adus la num comun tot
 # def f_c_1():
 #     f_c = 0
@@ -84,43 +134,6 @@ def f_c_k():
 #                 prod2 *= ((j - i) % p)
 #         f_c += (z[i - 1] * prod1 * inv_mod(prod2, p)) % p
 #     print(f_c % p)
-
-
-def multiply(P1, P2):
-    n = len(P1)
-    m = len(P2)
-    prod = [0] * (n + m - 1)
-    for i in range(n):
-        for j in range(m):
-            prod[i + j] += P1[i] * P2[j]
-    return prod
-
-
-def add(P1, P2):
-    n = len(P1)
-    m = len(P2)
-    sum = [0] * max(n, m)
-    for i in range(n):
-        sum[i] = P1[i]
-    for i in range(m):
-        sum[i] += P2[i]
-    return sum
-
-
-def printP(P):
-    n = len(P)
-    for i in range(n):
-        print(P[i], end="");
-        if (i != 0):
-            print(" * x ^", i, end="");
-        if (i != n - 1):
-            print(" + ", end="");
-    print("\n")
-
-
-printP(multiply([1, -1], [1, 1]))
-printP(multiply([5, 0, 10, 6], [1, 2, 4]))
-printP(add([5, 0, 10, 6], [1, 2, 4]))
 
 
 def get_P():
@@ -161,3 +174,4 @@ if __name__ == '__main__':
 
     f_c_worst()
     f_c_k()
+    P_dec()
