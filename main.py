@@ -1,9 +1,6 @@
-# Implement Reed-Solomon encoding/decoding using the algorithms dis-
-# cussed in class. For simplicity, consider s = 1 (a single error may be
-# corrected). Use as few modular inversions operations as possible. (10p)
-
 import sympy
 import random
+import time
 
 
 def gen_p(n):
@@ -81,11 +78,6 @@ def printP(P):
     print("\n")
 
 
-# printP(multiply([1, -1], [1, 1]))
-# printP(multiply([5, 0, 10, 6], [1, 2, 4]))
-# printP(add([5, 0, 10, 6], [1, 2, 4]))
-
-
 def f_c_worst(A):
     f_c = 0
     for i in A:
@@ -138,16 +130,23 @@ def P_dec(A):
 #     print(f_c % p)
 
 def decodificare():
-    f_c = -1
+    f_c = None
     A = None
+    k_time = None
+    kk_1_time = None
     while f_c != 0:
         A = random.sample(range(1, len(z) + 1), k + 1)
         # print(A)
-        # f_c = f_c_worst(A)
+        start_time = time.time()
+        f_c = f_c_worst(A)
+        kk_1_time = time.time() - start_time
         # print(f_c)
 
+        start_time = time.time()
         f_c = f_c_k(A)
+        k_time = time.time() - start_time
         # print(f_c)
+    print("k time %s vs kk-1 time %s" % (k_time, kk_1_time))
     print("A:", A)
     print("f_c:", f_c)
     print("Decodificare:", P_dec(A))
@@ -159,6 +158,14 @@ def decodificare():
 if __name__ == '__main__':
     p = gen_p(162)
     print("Un numar prim mare (peste 161 biti):", p)
+    k = 3
+    s = 1
+    y = encoding(k, s, p,
+                 "2678789503665347665881359631006576495673545615576715765365461585463545644645353434334229")
+    print("Codificare instanta mare:", y)
+    z = y
+    z[2] = 1
+    decodificare()
 
     k = 3
     p = 11
