@@ -37,7 +37,8 @@ def encode(a, k, s, p):
 
 def encoding(k, s, p, m):
     a = base_10_to_p(int(m), p)
-    return encode(a, k, s, p)
+    k = len(a) + 1
+    return encode(a, k, s, p), k
 
 
 #####################Decoding#####################
@@ -172,35 +173,38 @@ def decodificare():
 if __name__ == '__main__':
     p = gen_p(162)
     print("Un numar prim mare (peste 161 biti):", p)
-    k = 3
+    k = 0
     s = 1
-    y = encoding(k, s, p,
-                 "2678789503665347665881359631006576495673545615576715765365461585463545644645353434334229")
+    y, k = encoding(k, s, p,
+                    "2678789503665347665881359631006576495673545615576715765365461585463545644645353434334229")
     print("Codificare instanta mare:", y)
     z = y
     z[2] = 1
     decodificare()
 
-    k = 3
+    k = 0
     p = 11
     s = 1
-    print("Codificarea lui k = 3, s = 1, p = 11 si m = 29:", encoding(k, s, p, "29"))
+    y, k = encoding(k, s, p, "29")
+    print("Codificarea lui k = 3, s = 1, p = 11 si m = 29:", y)
     # y = [9, 0, 6, 5, 8]
     z = [9, 2, 6, 5, 8]
     decodificare()
 
-    k = 4
+    k = 0
     p = 13
     s = 1
-    print("Codificarea lui k = 4, s = 1, p = 13 si m = 205:", encoding(k, s, p, "205"))
-    # y = [0, 12, 5, 0, 5, 2]
-    z = [0, 9, 5, 0, 5, 2]
+    y, k = encoding(k, s, p, "45620")
+    print("Codificarea lui k = 6, s = 1, p = 13 si m = 45620:", y)
+    # y = [6, 10, 0, 8, 9, 2, 0, 7]
+    z = [6, 10, 0, 8, 1, 2, 0, 7]
     decodificare()
 
-    k = 5
-    p = 31
+    k = 0
+    p = 13
     s = 1
-    print("Codificarea lui k = 5, s = 1, p = 31 si m = 65785:", encoding(k, s, p, "65785"))
-    # y = [25, 2, 30, 1, 3, 10, 6]
-    z = [25, 11, 30, 1, 3, 10, 6]
+    y, k = encoding(k, s, p, "456206")
+    print("Codificarea lui k = 7, s = 1, p = 13 si m = 456206:", y)
+    # y = [12, 8, 8, 7, 0, 12, 3, 12, 7]
+    z = [12, 8, 8, 7, 0, 12, 7, 12, 7]
     decodificare()
