@@ -7,7 +7,7 @@ def gen_p(n):
     return sympy.randprime(2 ** (n - 1) + 1, 2 ** n - 1)
 
 
-#####################Encoding#####################
+# ####################Encoding#####################
 
 def base_10_to_p(m, p):
     print("Reprezentarea lui ", m, "in baza", p, end=" ")
@@ -41,7 +41,7 @@ def encoding(k, s, p, m):
     return encode(a, k, s, p), k
 
 
-#####################Decoding#####################
+# ####################Decoding#####################
 
 def inv_mod(x, p):
     return pow(x, -1, p)
@@ -71,11 +71,11 @@ def add(P1, P2):
 def printP(P):
     n = len(P)
     for i in range(n):
-        print(P[i], end="");
+        print(P[i], end="")
         if (i != 0):
-            print(" * x ^", i, end="");
+            print(" * x ^", i, end="")
         if (i != n - 1):
-            print(" + ", end="");
+            print(" + ", end="")
     print("\n")
 
 
@@ -144,6 +144,7 @@ def decodificare():
     A = None
     k_time = None
     kk_1_time = None
+    one_time = None
     while f_c != 0:
         A = random.sample(range(1, len(z) + 1), k + 1)
         # print(A)
@@ -167,9 +168,8 @@ def decodificare():
     print("Decodificare:", P_dec(A), "\n")
 
 
-#####################Main#####################
+# ####################Main#####################
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     p = gen_p(162)
     print("Un numar prim mare (peste 161 biti):", p)
