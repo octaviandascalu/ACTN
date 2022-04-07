@@ -136,6 +136,7 @@ def P_dec(A):
                 prod2 = ((prod2 * (i - j)) % p)
         pol = add(pol, [(x * z[i - 1] * inv_mod(prod2, p)) % p for x in prod1])
     # pol.reverse()
+    pol = pol[1:-1]
     return pol
 
 
