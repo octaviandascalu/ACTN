@@ -7,6 +7,9 @@ statistics = False
 garnerTime = []
 decryptTime = []
 henselTime = []
+Lr_bin_expTime = []
+Lr_beta_expTime = []
+Lr_slid_wind_expTime = []
 
 
 def gen_prime(n):
@@ -147,7 +150,7 @@ def hensel(p, q, e, d, y):
     x += alpha * x
     end = time.time() - start
     if not statistics:
-        print("garner time: ", end)
+        print("hensel time: ", end)
     else:
         henselTime.append(end)
     return x
@@ -180,14 +183,96 @@ def multipowerRSA():
 
 # ####################Lanturi aditive#####################
 def base_10_to_p(m, p):
-    print("Reprezentarea lui ", m, "in baza", p, end=" ")
+    # print("Reprezentarea lui ", m, "in baza", p, end=" ")
     r = []
     while m:
         r.append(m % p)
         m = m // p
-    # r.reverse()
-    print(":", r)
+    # print(":", r)
     return r
+
+
+def garner1(p, q, r, d, y):
+    start = time.time()
+
+    mp = Lr_bin_exp(y % p, d % (p - 1), p)
+    mq = Lr_bin_exp(y % q, d % (q - 1), q)
+    mr = Lr_bin_exp(y % r, d % (r - 1), r)
+
+    x = mp
+    alpha = ((mq - x) % q * inv_mod(mp, q)) % q
+    x += alpha * mp
+    alpha = ((mr - x) % r * inv_mod(mp * mq, r)) % r
+    x += alpha * mp * mq
+
+    end = time.time() - start
+    if not statistics:
+        print("Lr_bin_exp time: ", end)
+    else:
+        Lr_bin_expTime.append(end);
+    return x
+
+
+def garner2(p, q, r, d, y):
+    start = time.time()
+
+    mp = Lr_beta_exp(y % p, d % (p - 1), p)
+    mq = Lr_beta_exp(y % q, d % (q - 1), q)
+    mr = Lr_beta_exp(y % r, d % (r - 1), r)
+
+    x = mp
+    alpha = ((mq - x) % q * inv_mod(mp, q)) % q
+    x += alpha * mp
+    alpha = ((mr - x) % r * inv_mod(mp * mq, r)) % r
+    x += alpha * mp * mq
+
+    end = time.time() - start
+    if not statistics:
+        print("Lr_beta_exp time: ", end)
+    else:
+        Lr_beta_expTime.append(end);
+    return x
+
+
+def garner3(p, q, r, d, y):
+    start = time.time()
+
+    vv = 2
+    mp = Lr_slid_wind_exp(y % p, d % (p - 1), p, vv)
+    mq = Lr_slid_wind_exp(y % q, d % (q - 1), q, vv)
+    mr = Lr_slid_wind_exp(y % r, d % (r - 1), r, vv)
+
+    x = mp
+    alpha = ((mq - x) % q * inv_mod(mp, q)) % q
+    x += alpha * mp
+    alpha = ((mr - x) % r * inv_mod(mp * mq, r)) % r
+    x += alpha * mp * mq
+
+    end = time.time() - start
+    if not statistics:
+        print("Lr_beta_exp time: ", end)
+    else:
+        Lr_slid_wind_expTime.append(end);
+    return x
+
+
+def multiprimeRSA1():
+    p, q, r, n, phi_n, e, d, y = gen_instMPrime()
+    x = decrypt(y, d, n)
+    if not statistics:
+        print("x is ", x)
+    x = garner(p, q, r, d, y)
+    if not statistics:
+        print("x is ", x)
+    x = garner1(p, q, r, d, y)
+    if not statistics:
+        print("x is ", x)
+    x = garner2(p, q, r, d, y)
+    if not statistics:
+        print("x is ", x)
+    x = garner3(p, q, r, d, y)
+    if not statistics:
+        print("x is ", x)
 
 
 # - folosind metoda binara de la stanga la dreapta (0.5p)
@@ -202,8 +287,10 @@ def Lr_bin_exp(x, n, m):
     return y
 
 
+# - folosind metoda ferestrei fixe de la stanga la dreapta (0.5p)
+
 def Lr_beta_exp(x, n, m):
-    beta = 4
+    beta = 16
     vx = []
     vx.append(1)
     for i in range(1, beta):
@@ -217,11 +304,40 @@ def Lr_beta_exp(x, n, m):
     return y
 
 
-# - folosind metoda ferestrei fixe de la stanga la dreapta (0.5p)
 # - folosind metoda ferestrei glisante de la stanga la dreapta (0.5p)
-# - comparatii intre cele trei metode (0.5p)
+def Lr_slid_wind_exp(x, n, m, vv):
+    vx = [0] * pow(2, vv)
+    vx[1] = (x % m)
+    vx[2] = (vx[1] * vx[1]) % m
+    for w in range(3, pow(2, vv), 2):
+        vx[w] = (vx[w - 2] * vx[2]) % m
+    n = base_10_to_p(n, 2)
+    y = 1
+    k = len(n)
+    i = k - 1
+    while i >= 0:
+        if n[i] == 0:
+            y = (y * y) % m
+            i -= 1
+        else:
+            j = i - vv + 1
+            while j < i and n[j] != 1:
+                j += 1
+            for l in range(1, i - j + 1 + 1):
+                y = (y * y) % m
+
+            coef = 0
+            for l in range(j, i + 1):
+                if n[l] == 1:
+                    coef += pow(2, l - j)
+            y = (y * vx[coef]) % m
+            i = j - 1
+    return y
+    # - comparatii intre cele trei metode (0.5p)
+
 
 if __name__ == '__main__':
+    # print(Lr_bin_exp(5, 10, 170))
     statistics = False
     multiprimeRSA()
 
@@ -240,3 +356,12 @@ if __name__ == '__main__':
         multipowerRSA()
     print("Average Decrypt Time is ", sum(decryptTime) / len(decryptTime))
     print("Average Hensel Time is ", sum(henselTime) / len(henselTime))
+
+    statistics = False
+    multiprimeRSA1()
+    statistics = True
+    for i in range(30):
+        multiprimeRSA1()
+    print("Average Lr_bin_exp Time is ", sum(Lr_bin_expTime) / len(Lr_bin_expTime))
+    print("Average Lr_beta_exp Time is ", sum(Lr_beta_expTime) / len(Lr_beta_expTime))
+    print("Average Lr_slid_wind_exp Time is ", sum(Lr_slid_wind_expTime) / len(Lr_slid_wind_expTime))
