@@ -6,7 +6,8 @@ statistics = False
 
 garnerTime = []
 decryptTime = []
-henselTime=[]
+henselTime = []
+
 
 def gen_prime(n):
     return sympy.randprime(2 ** (n - 1) + 1, 2 ** n - 1)
@@ -178,7 +179,44 @@ def multipowerRSA():
 
 
 # ####################Lanturi aditive#####################
+def base_10_to_p(m, p):
+    print("Reprezentarea lui ", m, "in baza", p, end=" ")
+    r = []
+    while m:
+        r.append(m % p)
+        m = m // p
+    # r.reverse()
+    print(":", r)
+    return r
+
+
 # - folosind metoda binara de la stanga la dreapta (0.5p)
+def Lr_bin_exp(x, n, m):
+    n = base_10_to_p(n, 2)
+    y = 1
+    k = len(n)
+    for i in reversed(range(k)):
+        y = (y * y) % m
+        if n[i] == 1:
+            y = (y * x) % m
+    return y
+
+
+def Lr_beta_exp(x, n, m):
+    beta = 4
+    vx = []
+    vx.append(1)
+    for i in range(1, beta):
+        vx.append((vx[i - 1] * x) % m)
+    n = base_10_to_p(n, beta)
+    y = 1
+    k = len(n)
+    for i in reversed(range(k)):
+        y = pow(y, beta, m)
+        y = (y * vx[n[i]]) % m
+    return y
+
+
 # - folosind metoda ferestrei fixe de la stanga la dreapta (0.5p)
 # - folosind metoda ferestrei glisante de la stanga la dreapta (0.5p)
 # - comparatii intre cele trei metode (0.5p)
@@ -190,16 +228,15 @@ if __name__ == '__main__':
     statistics = True
     for i in range(30):
         multiprimeRSA()
-    print("Average Decrypt Time is ", sum(decryptTime)/len(decryptTime))
-    print("Average Garner Time is ", sum(garnerTime)/len(garnerTime))
-
+    print("Average Decrypt Time is ", sum(decryptTime) / len(decryptTime))
+    print("Average Garner Time is ", sum(garnerTime) / len(garnerTime))
 
     statistics = False
     multipowerRSA()
 
-    decryptTime=[]
+    decryptTime = []
     statistics = True
     for i in range(30):
         multipowerRSA()
-    print("Average Decrypt Time is ", sum(decryptTime)/len(decryptTime))
-    print("Average Hensel Time is ", sum(henselTime)/len(henselTime))
+    print("Average Decrypt Time is ", sum(decryptTime) / len(decryptTime))
+    print("Average Hensel Time is ", sum(henselTime) / len(henselTime))
