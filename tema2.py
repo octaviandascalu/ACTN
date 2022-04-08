@@ -2,6 +2,11 @@ import sympy
 import random
 import time
 
+statistics = False
+
+garnerTime = []
+decryptTime = []
+henselTime=[]
 
 def gen_prime(n):
     return sympy.randprime(2 ** (n - 1) + 1, 2 ** n - 1)
@@ -15,10 +20,6 @@ def gcd(a, b):
     if b == 0:
         return a
     return gcd(b, a % b)
-
-
-def lcm(a, b):
-    return a * b / gcd(a, b)
 
 
 # ####################Multiprime RSA#####################
@@ -42,9 +43,10 @@ def gen_instMPrime():
 
     x = 105651
     x = x % n
-    print("x is ", x)
     y = encrypt(x, e, n)
-    print_instMPrime(p, q, r, n, phi_n, e, d, y)
+    if not statistics:
+        print("x is ", x)
+        print_instMPrime(p, q, r, n, phi_n, e, d, y)
     return p, q, r, n, phi_n, e, d, y
 
 
@@ -56,7 +58,10 @@ def decrypt(y, d, n):
     start = time.time()
     x = pow(y, d, n)
     end = time.time() - start
-    print("decrypt time: ", end)
+    if not statistics:
+        print("decrypt time: ", end)
+    else:
+        decryptTime.append(end);
     return x
 
 
@@ -74,7 +79,10 @@ def garner(p, q, r, d, y):
     x += alpha * mp * mq
 
     end = time.time() - start
-    print("garner time: ", end)
+    if not statistics:
+        print("garner time: ", end)
+    else:
+        garnerTime.append(end);
     return x
 
 
@@ -95,9 +103,11 @@ def print_instMPrime(p, q, r, n, phi_n, e, d, y):
 def multiprimeRSA():
     p, q, r, n, phi_n, e, d, y = gen_instMPrime()
     x = decrypt(y, d, n)
-    print("x is ", x)
+    if not statistics:
+        print("x is ", x)
     x = garner(p, q, r, d, y)
-    print("x is ", x)
+    if not statistics:
+        print("x is ", x)
 
 
 # ####################Multipower RSA#####################
@@ -116,9 +126,10 @@ def gen_instMPower():
 
     x = 105651
     x = x % n
-    print("x is ", x)
     y = encrypt(x, e, n)
-    print_instMPower(p, q, n, phi_n, e, d, y)
+    if not statistics:
+        print("x is ", x)
+        print_instMPower(p, q, n, phi_n, e, d, y)
     return p, q, n, phi_n, e, d, y
 
 
@@ -134,7 +145,10 @@ def hensel(p, q, e, d, y):
     alpha = ((mq - x) % q * inv_mod(x, q)) % q
     x += alpha * x
     end = time.time() - start
-    print("garner time: ", end)
+    if not statistics:
+        print("garner time: ", end)
+    else:
+        henselTime.append(end)
     return x
 
 
@@ -151,9 +165,12 @@ def print_instMPower(p, q, n, phi_n, e, d, y):
 def multipowerRSA():
     p, q, n, phi_n, e, d, y = gen_instMPower()
     x = decrypt(y, d, n)
-    print("x is ", x)
+
+    if not statistics:
+        print("x is ", x)
     x = hensel(p, q, e, d, y)
-    print("x is ", x)
+    if not statistics:
+        print("x is ", x)
 
 
 # - decriptarea folosind Teorema Chineza a Resturilor si Lema lui Hensel (2p)
@@ -167,8 +184,22 @@ def multipowerRSA():
 # - comparatii intre cele trei metode (0.5p)
 
 if __name__ == '__main__':
-    # print(gen_prime(512))
-    # print(gcd(12, 16))
+    statistics = False
+    multiprimeRSA()
 
-    # multiprimeRSA()
+    statistics = True
+    for i in range(30):
+        multiprimeRSA()
+    print("Average Decrypt Time is ", sum(decryptTime)/len(decryptTime))
+    print("Average Garner Time is ", sum(garnerTime)/len(garnerTime))
+
+
+    statistics = False
     multipowerRSA()
+
+    decryptTime=[]
+    statistics = True
+    for i in range(30):
+        multipowerRSA()
+    print("Average Decrypt Time is ", sum(decryptTime)/len(decryptTime))
+    print("Average Hensel Time is ", sum(henselTime)/len(henselTime))
