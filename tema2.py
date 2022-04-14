@@ -43,9 +43,11 @@ def gen_instMPrime():
     n = p * q * r
     phi_n = (p - 1) * (q - 1) * (r - 1)
     e = gen_prime(16)
+    while gcd(e, phi_n) != 1:
+        e = gen_prime(16)
     d = inv_mod(e, phi_n)
 
-    x = 105651
+    x = 105651786786786
     x = x % n
     y = encrypt(x, e, n)
     if not statistics:
@@ -128,7 +130,7 @@ def gen_instMPower():
     e = gen_prime(16)
     d = inv_mod(e, phi_n)
 
-    x = 105651
+    x = 105651786786786
     x = x % n
     y = encrypt(x, e, n)
     if not statistics:
@@ -338,14 +340,18 @@ def Lr_slid_wind_exp(x, n, m, vv):
 
 if __name__ == '__main__':
     # print(Lr_bin_exp(5, 10, 170))
+    # print(Lr_bin_exp(67878478,2274722,643))
+    # print(pow(67878478,2274722,643))
     statistics = False
     multiprimeRSA()
 
     statistics = True
     for i in range(30):
         multiprimeRSA()
+    print()
     print("Average Decrypt Time is ", sum(decryptTime) / len(decryptTime))
     print("Average Garner Time is ", sum(garnerTime) / len(garnerTime))
+    print()
 
     statistics = False
     multipowerRSA()
@@ -354,14 +360,18 @@ if __name__ == '__main__':
     statistics = True
     for i in range(30):
         multipowerRSA()
+    print()
     print("Average Decrypt Time is ", sum(decryptTime) / len(decryptTime))
     print("Average Hensel Time is ", sum(henselTime) / len(henselTime))
+    print()
 
     statistics = False
     multiprimeRSA1()
     statistics = True
     for i in range(30):
         multiprimeRSA1()
+    print()
     print("Average Lr_bin_exp Time is ", sum(Lr_bin_expTime) / len(Lr_bin_expTime))
     print("Average Lr_beta_exp Time is ", sum(Lr_beta_expTime) / len(Lr_beta_expTime))
     print("Average Lr_slid_wind_exp Time is ", sum(Lr_slid_wind_expTime) / len(Lr_slid_wind_expTime))
+    print()
