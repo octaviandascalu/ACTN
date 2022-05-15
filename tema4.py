@@ -9,44 +9,56 @@ def gen_prime(n):
 
 def gen_factorization(n):
     f = []
+
     d = 2
     while n % d == 0:
-        # f.append(d)
+        f.append(d)
         n /= d
-    d = 3
-    while d * d <= n:
-        while n % d == 0:
-            f.append(d)
-            n /= d
-        d += 2
+
+    for i in range(3, int(np.sqrt(n)) + 1, 2):
+        # while i divides n , print i and divide n
+        while n % i == 0:
+            f.append(i)
+            n = n / i
 
     if n > 1:
         f.append(int(n))
-
-    # f.sort()
-    return set(f)
+    # print(f)
+    f = list(set(f))
+    f.sort()
+    return f
 
 
 def gen_shanks_input():
+    print("gen_shanks_input")
     p = gen_prime(16)
     alpha = PrimitiveRoot2(p)
-    return p, alpha
+    while alpha == -1:
+        print("what")
+        p = gen_prime(32)
+        alpha = PrimitiveRoot2(p)
+    return (p, alpha)
 
 
 def GenerateQuadraticNonResidue(p):
+    print("GenerateQuadraticNonResidue")
     if p % 4 == 3:
+        print("alpha1:", -1)
         return -1
     if p % 8 == 5:
+        print("alpha1:", 2)
         return 2
 
     a = rd.randint(2, p - 1)
-    while LegendreJacobi(a, p) != -1 or a == -1:
+    while LegendreJacobi(a, p) != -1:
         a = rd.randint(2, p - 1)
+
     print("alpha1:", a)
     return a
 
 
 def PrimitiveRoot2(p):
+    print("PrimitiveRoot2")
     alpha = GenerateQuadraticNonResidue(p)
 
     print("alpha2:", alpha)
@@ -54,7 +66,7 @@ def PrimitiveRoot2(p):
     f = gen_factorization(p - 1)
     print("f:", f)
     for r in f:
-        if pow(alpha, (p - 1) // r) == 1:
+        if r != 2 and pow(alpha, (p - 1) // r, p) == 1:
             ok = 0
     if ok == 1:
         return alpha
@@ -76,20 +88,22 @@ def LegendreJacobi(a, n):
 
 def shanks(p, alpha, beta):
     m = int(np.ceil(np.sqrt(p - 1)))
+    print("alpha3:", alpha)
     # babysteps
     l = []
     for j in range(m):
-        l.append(pow(alpha, j, p))
-    l.sort()
+        l.append((j, pow(alpha, j, p)))
+    l.sort(key=lambda x: x[1])
     print("l:", l)
 
     # giant steps
     for i in range(m):
         val = (beta * pow(alpha, -i * m, p)) % p
-        print("val:", val)
-        if val in l:
-            j = l.index(val)
-            return (i * m + j) % p
+        # print("val:", val)
+        for k in range(m):
+            if l[k][1] == val:
+                j = l[k][0]
+                return (i * m + j) % p
     return "No discret log found"
 
 
@@ -104,9 +118,9 @@ def sph():
 
 
 if __name__ == '__main__':
-    print("shanks:", shanks(13, 2, 11))
+    # print("shanks:", shanks(13, 2, 11))
     # print(gen_factorization(48048))
 
-    p, alpha = gen_shanks_input()
+    (p, alpha) = gen_shanks_input()
     beta = rd.randint(1, p - 1)
     print("shanks(", p, ",", alpha, ",", beta, "):", shanks(p, alpha, beta))
