@@ -116,15 +116,16 @@ def Shanks(p, alpha, beta):
 
 
 if __name__ == '__main__':
-    print("Shanks(13, 2, 11):", Shanks(13, 2, 11), end="\n\n")
+
+    epsilon = Shanks(13, 2, 11)
+    print("Shanks(13, 2, 11):", epsilon, end="\n\n")
+    print(pow(2, epsilon, 13) == 11)
     print()
 
-    p, alpha, beta = gen_input_shanks()
-    while alpha is None:
-        p, alpha, beta = gen_input_shanks()
-    print("p, alpha, beta:", p, alpha, beta)
-    print("Shanks(", p, ",", alpha, ",", p-1, "):", Shanks(p, alpha, p-1), end="\n\n")
-
-
-
-
+    # p, alpha, beta = gen_input_shanks()
+    # while alpha is None:
+    #     p, alpha, beta = gen_input_shanks()
+    # print("p, alpha, beta:", p, alpha, beta)
+    # epsilon = Shanks(p, alpha, p - 1)
+    # print("Shanks(", p, ",", alpha, ",", p - 1, "):", epsilon, end="\n\n")
+    # print(pow(alpha, epsilon, p) == beta)
