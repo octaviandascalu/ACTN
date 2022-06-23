@@ -60,7 +60,7 @@ def LegendreJacobi(a, n):
 
 def GenerateQuadraticNonResidue(p):
     if p % 4 == 3:
-        return -1
+        return p - 1
     if p % 8 == 5:
         return 2
 
@@ -116,7 +116,6 @@ def Shanks(p, alpha, beta):
 
 
 if __name__ == '__main__':
-
     epsilon = Shanks(13, 2, 11)
     print("Shanks(13, 2, 11):", epsilon, end="\n\n")
     print(pow(2, epsilon, 13) == 11)
