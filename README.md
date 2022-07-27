@@ -1,24 +1,19 @@
 # ACTN
  
-BAREM TEMA 1
+## Tema 1
 
--generarea parametrului p, numar prim mare (peste 161 biti) (1p)
-  (folosind o biblioteca dedicata numerelor mari (BigInteger pentru Java, NTL/GMP pentru C/C++ etc.))
+* Implementarea algoritmului Reed-Solomon.
 
+## Tema 2
 
-----------------Codificare----------------
+* Implementarea decriptarii RSA multi-prime folosind Teorema Chineza a resturilor.
+* Implementare decriptarii RSA multi-power folosind Teorema Chineza a resturilor si Lema lui Hensel.
+ 
+## Tema 3
 
--codificarea input-ului (specificat initial ca un sir de caractere) ca vector de numere naturale mai mici decat p (1p)
-
--codificarea efectiva, folosind schema lui Horner pentru evaluarea polinomului P(x) in punctele 1,2,...,n (2p)
-
-
----------------Decodificare---------------
-
--calculul coeficientului liber - maxim (3p), dupa cum urmeaza:
-                     - varianta folosind k(k-1) inversari (1p)
-                     - varianta folosind k inversari (1p)
-                     - varianta folosind o singura inversare (1p)
-
--comparatii din punct de vedere al timpului pentru variantele precedente (1p)
--reconstructia polinomului P(x) in faza finala a decodificarii, creand propria functie/procedura pentru inmultirea de polinoame avand coeficienti numere naturale mai mici decat p (2p)
+* Implementarea testului de primalitate Solovay-Strassen.
+* Implementarea testului de primalitate Lucas-Lehmer pentru numere Mersenne.
+ 
+## Tema 4
+* Implementarea algoritmului Shanks.
+* Implementare algoritmului Silver-Pohlig-Hellman pentru calculul logaritmilor discreti pe numere mari.
